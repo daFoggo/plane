@@ -24,6 +24,7 @@ import usePeekOverviewOutsideClickDetector from "@/hooks/use-peek-overview-outsi
 // local imports
 import type { TIssueOperations } from "../issue-detail";
 import { IssueActivity } from "../issue-detail/issue-activity";
+import { IssueSimilarCases } from "../issue-detail/similar-cases";
 import { IssueDetailWidgets } from "../issue-detail-widgets";
 import { IssuePeekOverviewError } from "./error";
 import type { TPeekModes } from "./header";
@@ -227,6 +228,8 @@ export const IssueView = observer(function IssueView(props: IIssueView) {
                       />
                     </div>
 
+                    <IssueSimilarCases issueId={issueId} className="mb-6" />
+
                     <IssueDetailWidgets
                       workspaceSlug={workspaceSlug}
                       projectId={projectId}
@@ -265,6 +268,8 @@ export const IssueView = observer(function IssueView(props: IIssueView) {
                           isSubmitting={isSubmitting}
                           setIsSubmitting={(value) => setIsSubmitting(value)}
                         />
+
+                        <IssueSimilarCases issueId={issueId} />
 
                         <div className="py-2">
                           <IssueDetailWidgets

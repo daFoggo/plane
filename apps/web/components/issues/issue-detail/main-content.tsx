@@ -36,6 +36,7 @@ import { IssueDetailMetaRow } from "./detail-meta-row";
 import { IssueActivity } from "./issue-activity";
 import { IssueParentDetail } from "./parent";
 import { IssueReaction } from "./reactions";
+import { IssueSimilarCases } from "./similar-cases";
 import type { TIssueOperations } from "./root";
 // services init
 const workItemVersionService = new WorkItemVersionService();
@@ -221,6 +222,8 @@ export const IssueMainContent = observer(function IssueMainContent(props: Props)
             />
           )}
         </div>
+
+        <IssueSimilarCases issueId={issueId} />
       </div>
 
       <IssueDetailWidgets

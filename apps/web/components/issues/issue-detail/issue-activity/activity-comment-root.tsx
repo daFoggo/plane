@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { Fragment } from "react";
 import { observer } from "mobx-react";
 // plane imports
 import { EmptyStateCompact } from "@plane/blocks/empty-state";
@@ -13,6 +14,7 @@ import { useTranslation } from "@plane/i18n";
 import type { TCommentsOperations } from "@plane/types";
 // components
 import { CommentCard } from "@/components/comments/card/root";
+import { IssueRiskDecision } from "../risk-decision";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // local imports
@@ -78,19 +80,28 @@ export const IssueActivityCommentRoot = observer(function IssueActivityCommentRo
       {filteredActivityAndComments.map((activityComment, index) => {
         const comment = getCommentById(activityComment.id);
         return activityComment.activity_type === "COMMENT" ? (
-          <CommentCard
-            key={activityComment.id}
-            workspaceSlug={workspaceSlug}
-            entityId={issueId}
-            comment={comment}
-            activityOperations={activityOperations}
-            ends={getEnds(index)}
-            showAccessSpecifier={!!showAccessSpecifier}
-            showCopyLinkOption={!isIntakeIssue}
-            disabled={disabled}
-            projectId={projectId}
-            enableReplies
-          />
+          <Fragment key={activityComment.id}>
+            <CommentCard
+              workspaceSlug={workspaceSlug}
+              entityId={issueId}
+              comment={comment}
+              activityOperations={activityOperations}
+              ends={getEnds(index)}
+              showAccessSpecifier={!!showAccessSpecifier}
+              showCopyLinkOption={!isIntakeIssue}
+              disabled={disabled}
+              projectId={projectId}
+              enableReplies
+            />
+            {/* the buttons of a risk alert sit right under the bot's brief comment */}
+            <IssueRiskDecision
+              workspaceSlug={workspaceSlug}
+              projectId={projectId}
+              issueId={issueId}
+              commentId={activityComment.id}
+              disabled={!!disabled}
+            />
+          </Fragment>
         ) : BASE_ACTIVITY_FILTER_TYPES.includes(activityComment.activity_type as EActivityFilterType) ? (
           <IssueActivityItem key={activityComment.id} activityId={activityComment.id} ends={getEnds(index)} />
         ) : null;

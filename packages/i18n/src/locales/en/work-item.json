@@ -445,5 +445,35 @@
       "label": "Epic Title",
       "required": "Epic title is required."
     }
+  },
+  "risk_alert": {
+    "title": "Sprint-risk alert",
+    "state_pending": "Waiting for a decision",
+    "state_approved": "Approved by {by}",
+    "state_dismissed": "Dismissed by {by}",
+    "approve": "Approve: raise priority to High",
+    "dismiss": "Dismiss",
+    "undo": "Undo",
+    "error_title": "Sprint-risk service",
+    "error": "That could not be completed. Nothing was changed."
+  },
+  "similar_cases": {
+    "title": "Similar work done before",
+    "verdict_small": "Usually small work.",
+    "verdict_medium": "Usually medium-sized work.",
+    "verdict_large": "Usually large work.",
+    "verdict_mixed": "Sizes vary a lot, no clear pattern.",
+    "breakdown": "Among the {total} most similar items: {small} small · {medium} medium · {large} large",
+    "examples": "Closest matches",
+    "size_small": "Small",
+    "size_medium": "Medium",
+    "size_large": "Large",
+    "days": "worked on for about {days} days",
+    "days_less": "worked on for under a day",
+    "confidence_low": "Only {count} of the {total} most similar items are {size}; the rest vary in size. Treat this as a hint to ask the people who will do the work, not as a basis for promising a deadline.",
+    "confidence_medium": "{count} of the {total} most similar items are {size}, so this one probably is too. Still, guessing this way is only slightly more accurate than using the project average, so do not fix a deadline on this alone.",
+    "scale_note": "Small, medium and large are worked out inside this project, from the points the team gave before: \"small\" is the lightest third of items, \"large\" the heaviest 20%, the rest is \"medium\". This is not hours of work.",
+    "confidence_low_title": "Confidence: low",
+    "confidence_medium_title": "Confidence: medium"
   }
 }

@@ -1,0 +1,48 @@
+# Adds the sprint-risk backend (agentick-backend, FastAPI + its own PostgreSQL) to the Plane stack and routes /risk/*
+# to it through Plane's own proxy. Plane stays the main system; this backend is an external service that calls Plane:
+#   docker compose --env-file .env -p plane -f docker-compose.yml -f docker-compose.risk.yml up -d --build
+# .env (git-ignored) must define RISK_BOT_API_KEY, RISK_INGEST_TOKEN and RISK_DB_PASSWORD.
+services:
+  risk-db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: risk
+      POSTGRES_USER: risk
+      POSTGRES_PASSWORD: ${RISK_DB_PASSWORD}
+    volumes:
+      - risk-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U risk -d risk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  risk:
+    build: ../../../../agentick-backend
+    restart: always
+    environment:
+      ENVIRONMENT: production   # hides /docs and /openapi.json: this service is reachable through the public proxy
+      DATABASE_URL: postgresql+psycopg://risk:${RISK_DB_PASSWORD}@risk-db:5432/risk
+      PLANE_BASE_URL: http://api:8000
+      PLANE_API_KEY: ${RISK_BOT_API_KEY}
+      INGEST_TOKEN: ${RISK_INGEST_TOKEN}
+    ports:
+      - "127.0.0.1:31081:8000"   # the offline job publishes here; not exposed beyond this host
+    depends_on:
+      risk-db:
+        condition: service_healthy
+      api:
+        condition: service_started
+
+  web:
+    image: plane-web-risk:dev   # fork build with the risk-alert and similar-cases cards (docker build -f apps/web/Dockerfile.web)
+    volumes:
+      - ../../../apps/web/caddy/Caddyfile:/etc/caddy/Caddyfile:ro   # raised static rate limit: a page load fetches hundreds of chunks
+
+  proxy:
+    volumes:
+      - ./Caddyfile.risk:/etc/caddy/Caddyfile:ro
+
+volumes:
+  risk-db-data:

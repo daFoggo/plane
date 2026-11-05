@@ -445,5 +445,35 @@
       "label": "Tiêu đề sử thi",
       "required": "Tiêu đề sử thi là bắt buộc"
     }
+  },
+  "risk_alert": {
+    "title": "Cảnh báo rủi ro sprint",
+    "state_pending": "Đang chờ quyết định",
+    "state_approved": "{by} đã duyệt",
+    "state_dismissed": "{by} đã bỏ qua",
+    "approve": "Duyệt: nâng độ ưu tiên lên High",
+    "dismiss": "Bỏ qua",
+    "undo": "Hoàn tác",
+    "error_title": "Dịch vụ rủi ro sprint",
+    "error": "Không thực hiện được. Chưa có gì bị thay đổi."
+  },
+  "similar_cases": {
+    "title": "Những việc giống thế này trước đây",
+    "verdict_small": "Thường là việc nhỏ.",
+    "verdict_medium": "Thường là việc cỡ vừa.",
+    "verdict_large": "Thường là việc lớn.",
+    "verdict_mixed": "Cỡ rất khác nhau, chưa thấy xu hướng rõ.",
+    "breakdown": "Trong {total} việc giống nhất: {small} nhỏ · {medium} vừa · {large} lớn",
+    "examples": "Giống nhất",
+    "size_small": "Nhỏ",
+    "size_medium": "Vừa",
+    "size_large": "Lớn",
+    "days": "làm trong khoảng {days} ngày",
+    "days_less": "làm dưới 1 ngày",
+    "confidence_low": "Chỉ {count} trong {total} việc giống nhất cùng cỡ {size}, còn lại to nhỏ khác nhau. Hãy coi đây là gợi ý để hỏi thêm người làm, đừng dùng để hẹn deadline.",
+    "confidence_medium": "{count} trong {total} việc giống nhất cùng cỡ {size}, nên việc này nhiều khả năng cũng vậy. Tuy nhiên đoán theo cách này chỉ chính xác hơn lấy mức trung bình của dự án một chút, nên đừng chốt deadline chỉ dựa vào đây.",
+    "scale_note": "Cỡ nhỏ, vừa, lớn được tính riêng trong dự án này, dựa trên điểm nhóm đã chấm trước đây: \"nhỏ\" là 1/3 số việc nhẹ nhất, \"lớn\" là 20% số việc nặng nhất, còn lại là \"vừa\". Đây không phải số giờ làm.",
+    "confidence_low_title": "Độ chắc: thấp",
+    "confidence_medium_title": "Độ chắc: vừa"
   }
 }
