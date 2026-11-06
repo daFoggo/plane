@@ -22,12 +22,17 @@ const RISK_API = "/risk/api/v1/alerts";
 type TRiskAlert = {
   work_item_id: string;
   comment_id: string;
+  mark: number;
   rank: number;
   size: number;
   score: number;
   status: string;
   inactive_days: number;
   changes: string[];
+  action_type: "raise_priority" | "nudge_owner" | "move_next_cycle" | "assign_owner" | "split";
+  action_text: string | null;
+  cause: "waiting_on_person" | "blocked_by_issue" | "needs_decision" | "unclear_scope" | "not_started" | null;
+  evidence_quote: string | null;
   state: "pending" | "approved" | "dismissed";
   decided_by: string | null;
 };
@@ -87,6 +92,9 @@ export function IssueRiskDecision(props: Props) {
   };
 
   const decided = alert.state !== "pending";
+  // the first three are carried out in Plane on approval; the others are advice a person acts on
+  const isExecuted = ["raise_priority", "nudge_owner", "move_next_cycle"].includes(alert.action_type);
+  const approveLabel = isExecuted ? t(`risk_alert.approve_${alert.action_type}`) : t("risk_alert.approve_advice");
 
   return (
     <ActivityTimelineItem icon={<WarningTriangleOutline />} actor={t("risk_alert.title")}>
@@ -94,6 +102,33 @@ export function IssueRiskDecision(props: Props) {
         ·{" "}
         {decided ? t(`risk_alert.state_${alert.state}`, { by: alert.decided_by ?? "" }) : t("risk_alert.state_pending")}
       </span>
+      <p className="mt-1 text-caption-sm-regular text-tertiary">
+        {t("risk_alert.raised_at", { percent: Math.round(alert.mark * 100) })}
+      </p>
+      {alert.cause && (
+        <div className="mt-2">
+          <p className="text-body-sm-medium text-secondary">
+            {t("risk_alert.why_stuck")} {t(`risk_alert.cause_${alert.cause}`)}
+          </p>
+          {alert.evidence_quote && (
+            <p className="mt-1 border-l-2 border-subtle pl-2 text-body-sm-regular text-tertiary">
+              {alert.evidence_quote}
+            </p>
+          )}
+        </div>
+      )}
+      {!decided && alert.action_type === "nudge_owner" && alert.action_text && (
+        <div className="mt-2">
+          <p className="text-caption-sm-regular text-tertiary">{t("risk_alert.plan_nudge_owner")}</p>
+          <p className="mt-1 border-l-2 border-subtle pl-2 text-body-sm-regular text-secondary">{alert.action_text}</p>
+        </div>
+      )}
+      {!decided && alert.action_type === "move_next_cycle" && (
+        <p className="mt-2 text-body-sm-regular text-secondary">{t("risk_alert.plan_move_next_cycle")}</p>
+      )}
+      {!decided && !isExecuted && (
+        <p className="mt-2 text-body-sm-regular text-secondary">{t(`risk_alert.advice_${alert.action_type}`)}</p>
+      )}
       <div className="mt-3 flex flex-wrap gap-2">
         {decided ? (
           <Button
@@ -112,7 +147,7 @@ export function IssueRiskDecision(props: Props) {
               variant="primary"
               size="md"
               stretch="auto"
-              label={t("risk_alert.approve")}
+              label={approveLabel}
               onClick={() => act(`${issueId}/decision`, { decision: "approve" })}
               disabled={disabled || isBusy}
             />
